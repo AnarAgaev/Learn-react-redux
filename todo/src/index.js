@@ -1,13 +1,11 @@
 /**
- * Props
- * Свойства компонентов
+ * Arrays as component properties
+ * Массивы как свойства компонентов
  *
- * Объект props передаётся в каждый компонент
- * const Component = (props) => {
- *   return (<i> props.name </i>);
- * }
+ * Массив можно передать как свойство
+ * В JSX можно вствлять массивы элементов (не только по-одному)
+ * Можно передавать ВСЕ свойства объекта в компонент используя Object Spread оператор (не перечисляя каждое)
  *
- * !В компоненты в качестве свойств можно передавать любые значения (типы данных)
  *
  */
 
@@ -19,11 +17,18 @@ import AppHeader from './components/app-header';
 import TodoList from './components/todo-list';
 
 const App = () => {
+
+  const todoData = [
+    { label: 'Drink Coffee', active: false },
+    { label: 'Make Awesome App', active: true },
+    { label: 'Have a lunch', active: false }
+  ];
+
   return (
     <div>
       <AppHeader/>
       <SearchPanel/>
-      <TodoList/>
+      <TodoList todos={ todoData }/>
     </div>
   );
 };
