@@ -1,10 +1,10 @@
 /**
- * Arrays as component properties
- * Массивы как свойства компонентов
+ * Collections and keys
+ * Коллекции и ключи
  *
- * Массив можно передать как свойство
- * В JSX можно вствлять массивы элементов (не только по-одному)
- * Можно передавать ВСЕ свойства объекта в компонент используя Object Spread оператор (не перечисляя каждое)
+ * !Каждому элементу JSX в массиве нужно уникальное свойство key
+ * React использует key чтобы эффуктивно сравнивать элементы при обновлении
+ * Не стоит делать ключи из индексов массива
  *
  *
  */
@@ -19,9 +19,9 @@ import TodoList from './components/todo-list';
 const App = () => {
 
   const todoData = [
-    { label: 'Drink Coffee', active: false },
-    { label: 'Make Awesome App', active: true },
-    { label: 'Have a lunch', active: false }
+    { label: 'Drink Coffee', active: false, id: 1 },
+    { label: 'Make Awesome App', active: true, id: 2 },
+    { label: 'Have a lunch', active: false, id: 3 }
   ];
 
   return (
