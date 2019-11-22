@@ -1,11 +1,13 @@
 /**
- * React project structure
- * Структура React проекта
+ * Props
+ * Свойства компонентов
  *
- * Один компонент - один файл
- * Все компоненты размещаются в папке components
- * Хорошие компоненты = независимые компоненты
+ * Объект props передаётся в каждый компонент
+ * const Component = (props) => {
+ *   return (<i> props.name </i>);
+ * }
  *
+ * !В компоненты в качестве свойств можно передавать любые значения (типы данных)
  *
  */
 
@@ -26,4 +28,4 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App/>, document.getElemenntById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
