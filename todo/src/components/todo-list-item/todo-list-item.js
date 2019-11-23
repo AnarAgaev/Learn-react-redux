@@ -1,7 +1,17 @@
 /**
- * Как работает setState()
- * В setState() нужно передавать только измения в state
+ * Обновление state
+ * Обновляем state в зависимости от предыдущего значения
  *
+ * setState принимает функцию
+ * аргумент - текущий state
+ *
+ * this.setState((state) => {
+ *   return {
+ *     count: state.count++
+ *   };
+ * });
+ *
+ * в передаваемую в качестве аргумента state можно сразу деструктурировать свойства
  *
  */
 
@@ -16,14 +26,18 @@ export default class TodoListItem extends Component {
   };
 
   onLabelClick = () => {
-    this.setState({
-      done: true
+    this.setState(({ done }) => {
+      return {
+        done: !done
+      };
     });
   };
 
   onMarkImportant = () => {
-    this.setState({
-      important: true
+    this.setState(({important}) => {
+      return {
+        important: !important
+      };
     });
   };
 
