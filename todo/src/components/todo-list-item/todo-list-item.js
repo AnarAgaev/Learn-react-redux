@@ -1,10 +1,10 @@
 /**
- * Component Classes - Обработка событий
+ * State - Состояния компоента
  *
- * 1. Добавить свойство onClick(onBlur, onMouseOver, и т.д. любые стандартрые DOM события) к элементу
- * 2. Передать функцию обработчик события
- * 3. Убедиться, что this сохранит правильное значение внутри функции (типичная ошбика)
- *
+ * Состояния хранятся в поле state у Компонента класса
+ * this.state инициализируктся в конструкторе или в теле класса
+ * После инициализации state нельзя изменить (тлько читать)
+ * Чтобы обносить state используем метод setState()
  *
  */
 
@@ -13,12 +13,24 @@ import './todo-list-item.css';
 
 export default class TodoListItem extends Component {
 
-  onLabelClick = () => {
-    console.log(`Done ${ this.props.label }`);
+  state = {
+    done: false
   };
 
-  render() {
+  onLabelClick = () => {
+    this.setState({
+      done: true
+    });
+  };
+
+  render () {
     const { label, important = false } = this.props;
+    const { done } = this.state;
+
+    let classNames = 'todo-list-item';
+    if (done) {
+      classNames += ' done';
+    }
 
     const style = {
       color: important ? 'steelblue' : 'black',
@@ -26,7 +38,7 @@ export default class TodoListItem extends Component {
     };
 
     return (
-      <span className="todo-list-item">
+      <span className={ classNames }>
         <span
           className="todo-list-item-label"
           style={ style }
@@ -45,5 +57,5 @@ export default class TodoListItem extends Component {
         </button>
       </span>
     );
-  };
+  }
 }
