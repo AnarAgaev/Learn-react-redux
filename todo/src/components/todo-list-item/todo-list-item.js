@@ -1,20 +1,32 @@
-import React from 'react';
+/**
+ * Component Classes - Компоненты классы
+ *
+ * Классы испозовать когда нужно на компоненте хранить состояние
+ * Классы наследуют React.Component
+ * Метод render() класса React.Component возвращает React элемент (как в функциональном компоненте)
+ * !!! props доступны внутри Компонента класса через его свойство this.props
+ *
+ */
 
+import React, { Component } from 'react';
 import './todo-list-item.css';
 
-const TodoListItem = ({ label, important = false }) => {
+export default class TodoListItem extends Component {
 
-  const style = {
-    color: important ? 'steelblue' : 'black',
-    fontWeight: important ? 'bold' : 'normal'
-  };
+  render() {
+    const { label, important = false } = this.props;
 
-  return (
-    <span className="todo-list-item">
+    const style = {
+      color: important ? 'steelblue' : 'black',
+      fontWeight: important ? 'bold' : 'normal'
+    };
+
+    return (
+      <span className="todo-list-item">
       <span
         className="todo-list-item-label"
-        style={style}>
-        {label}
+        style={ style }>
+        { label }
       </span>
 
       <button type="button"
@@ -27,7 +39,6 @@ const TodoListItem = ({ label, important = false }) => {
         <i className="fa fa-trash-o" />
       </button>
     </span>
-  );
-};
-
-export default TodoListItem;
+    );
+  }
+}
