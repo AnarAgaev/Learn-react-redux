@@ -1,10 +1,10 @@
 /**
- * Component Classes - Компоненты классы
+ * Component Classes - Обработка событий
  *
- * Классы испозовать когда нужно на компоненте хранить состояние
- * Классы наследуют React.Component
- * Метод render() класса React.Component возвращает React элемент (как в функциональном компоненте)
- * !!! props доступны внутри Компонента класса через его свойство this.props
+ * 1. Добавить свойство onClick(onBlur, onMouseOver, и т.д. любые стандартрые DOM события) к элементу
+ * 2. Передать функцию обработчик события
+ * 3. Убедиться, что this сохранит правильное значение внутри функции (типичная ошбика)
+ *
  *
  */
 
@@ -12,6 +12,10 @@ import React, { Component } from 'react';
 import './todo-list-item.css';
 
 export default class TodoListItem extends Component {
+
+  onLabelClick = () => {
+    console.log(`Done ${ this.props.label }`);
+  };
 
   render() {
     const { label, important = false } = this.props;
@@ -23,22 +27,23 @@ export default class TodoListItem extends Component {
 
     return (
       <span className="todo-list-item">
-      <span
-        className="todo-list-item-label"
-        style={ style }>
-        { label }
+        <span
+          className="todo-list-item-label"
+          style={ style }
+          onClick={ this.onLabelClick } >
+          { label }
+        </span>
+
+        <button type="button"
+                className="btn btn-outline-success btn-sm float-right">
+          <i className="fa fa-exclamation" />
+        </button>
+
+        <button type="button"
+                className="btn btn-outline-danger btn-sm float-right">
+          <i className="fa fa-trash-o" />
+        </button>
       </span>
-
-      <button type="button"
-              className="btn btn-outline-success btn-sm float-right">
-        <i className="fa fa-exclamation" />
-      </button>
-
-      <button type="button"
-              className="btn btn-outline-danger btn-sm float-right">
-        <i className="fa fa-trash-o" />
-      </button>
-    </span>
     );
-  }
+  };
 }
