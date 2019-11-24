@@ -1,14 +1,14 @@
 /**
- * setState() удаление элемента часть 2
+ * setState() add element
+ * добавление элемента в setState
  *
- * setState() !Ни в коем случае не должен изменять текущий state
- * методы которые изменяют (mutate) массив использовать нельзя
+ * arr.push() - тоже изменение массива (нельзя выплнять на массивах из state)
  *
- * newArr = [
- *  ...oldArr.slice(0, idx),
- *  ...oldArr.slice(idx +1)
- * ];
- * Не изменяет oldArray
+ * добавить элемент в конец массива
+ * const newArr = [...oldArr, newItem];
+ *
+ * добавить элемент в начало массива
+ * const newArr = [newItem, ...oldArr];
  *
  *
  */
@@ -18,9 +18,12 @@ import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import TodoList from '../todo-list';
 import ItemStatusFilter from '../item-status-filter';
+import ItemAdForm from '../item-add-form';
 import './app.css';
 
 export default class App extends Component {
+
+  maxId = 100;
 
   state = {
     todoData: [
@@ -34,13 +37,27 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id);
 
-      // !!! Нельзя исопльзовать прямое удаление элементов из state, так как это очень русурсоёмко
-      // !!! todoData.splice(idx, 1);
-
       const newArray = [
         ...todoData.slice(0, idx),
         ...todoData.slice(idx + 1)
       ];
+
+      return {
+        todoData: newArray
+      };
+    });
+  };
+
+  addItem = (text) => {
+    // generate id
+    const newItem = {
+      label: text,
+      id: this.maxId++
+    };
+
+    // add element in array
+    this.setState(({ todoData }) => {
+      const newArray = [ ...todoData, newItem ];
 
       return {
         todoData: newArray
@@ -60,6 +77,8 @@ export default class App extends Component {
         <TodoList
           todos={ this.state.todoData }
           onDeleted={ this.deleteItem } />
+
+        <ItemAdForm onItemAdded={ this.addItem }/>
       </div>
     );
   };

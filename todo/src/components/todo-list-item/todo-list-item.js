@@ -59,5 +59,5 @@ export default class TodoListItem extends Component {
         </button>
       </span>
     );
-  }
-}
+  };
+};
