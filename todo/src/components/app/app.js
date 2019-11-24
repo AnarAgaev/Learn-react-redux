@@ -1,14 +1,9 @@
 /**
- * setState() add element
- * добавление элемента в setState
+ * Данные в React приложении
  *
- * arr.push() - тоже изменение массива (нельзя выплнять на массивах из state)
- *
- * добавить элемент в конец массива
- * const newArr = [...oldArr, newItem];
- *
- * добавить элемент в начало массива
- * const newArr = [newItem, ...oldArr];
+ * Централизировать управление данными хорошая проктика
+ * !!!Если данные нужно использовать в нескольких компонентах - их нужно хранить в родительском компоненте
+ * Чтобы "поднять" данные вверх по иерархии компонентов нужн использовать события
  *
  *
  */
@@ -49,13 +44,11 @@ export default class App extends Component {
   };
 
   addItem = (text) => {
-    // generate id
     const newItem = {
       label: text,
       id: this.maxId++
     };
 
-    // add element in array
     this.setState(({ todoData }) => {
       const newArray = [ ...todoData, newItem ];
 
@@ -63,6 +56,14 @@ export default class App extends Component {
         todoData: newArray
       };
     });
+  };
+
+  onToggleImportant = (id) => {
+    console.log('Toggle important',  id);
+  };
+
+  onToggleDone = (id) => {
+    console.log('Toggle done', id);
   };
 
   render () {
@@ -76,7 +77,9 @@ export default class App extends Component {
 
         <TodoList
           todos={ this.state.todoData }
-          onDeleted={ this.deleteItem } />
+          onDeleted={ this.deleteItem }
+          onToggleImportant={ this.onToggleImportant }
+          onToggleDone={ this.onToggleDone } />
 
         <ItemAdForm onItemAdded={ this.addItem }/>
       </div>
