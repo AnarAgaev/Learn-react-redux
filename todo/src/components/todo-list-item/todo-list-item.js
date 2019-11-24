@@ -1,17 +1,10 @@
 /**
- * Обновление state
- * Обновляем state в зависимости от предыдущего значения
+ * Собственная система событий (Удаление элемента часть 1)
  *
- * setState принимает функцию
- * аргумент - текущий state
+ * Любой компонент может генерировать собственные события (onDone, onAdded, ...)
+ * Достаточно передать callback функцию, как property, а затем вызвать её из компонента, когда наступило событие
+ * Через события, данные поднимаются "вверх" по иерархии компонентов
  *
- * this.setState((state) => {
- *   return {
- *     count: state.count++
- *   };
- * });
- *
- * в передаваемую в качестве аргумента state можно сразу деструктурировать свойства
  *
  */
 
@@ -42,7 +35,7 @@ export default class TodoListItem extends Component {
   };
 
   render () {
-    const { label } = this.props;
+    const { label, onDeleted } = this.props;
     const { done, important } = this.state;
 
     let classNames = 'todo-list-item';
@@ -70,7 +63,8 @@ export default class TodoListItem extends Component {
         </button>
 
         <button type="button"
-                className="btn btn-outline-danger btn-sm float-right">
+                className="btn btn-outline-danger btn-sm float-right"
+                onClick={ onDeleted } >
           <i className="fa fa-trash-o" />
         </button>
       </span>
