@@ -1,11 +1,5 @@
 /**
- * setState() обновление элемента
- *
- * oldObj нельзя изменять oldObj = oldArr[idx]
- * ... но можно скопитьвать в новый объект newObj = { ...oldObj, prop: newValue };
- * newArr = [ ...oldArr.slice(0, idx),
- *            newObj,
- *            ...oldArr.slice(udx + 1) ];
+ * Работа с формами
  *
  *
  */
@@ -20,22 +14,22 @@ import './app.css';
 
 export default class App extends Component {
 
-  maxId = 100;
+  Id = 100;
 
   state = {
     todoData: [
-      this.createTodoItem('Drink Coffee'),
-      this.createTodoItem('Make Awesome App'),
-      this.createTodoItem('Have a lunch')
+      this.createItem('Drink Coffee'),
+      this.createItem('Make Awesome App'),
+      this.createItem('Have a lunch')
     ]
   };
 
-  createTodoItem(label) {
+  createItem(label) {
     return {
       label,
       important: false,
       done: false,
-      id: this.maxId++
+      id: this.Id++
     };
   };
 
@@ -55,7 +49,7 @@ export default class App extends Component {
   };
 
   addItem = (text) => {
-    const newItem = this.createTodoItem(text);
+    const newItem = this.createItem(text);
 
     this.setState(({ todoData }) => {
       const newArray = [ ...todoData, newItem ];
