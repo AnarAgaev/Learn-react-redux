@@ -1,13 +1,12 @@
 /**
- * Работа с формами
+ * Controlled component
+ * Контролируемые компоненты
  *
- *
- * Используем onChange()  чтобы получать текущее значение
- * onSubmit() - событие "отправки" формы
- * event.preventDefault() - остановить перезагрузку страницы (блокируем событие на элементе)
+ * onChange() обновляет state, a state обновляет value элемента
+ * state - удинственный источнки значений
+ * легко обновлять value, можно обновлять не только в ответ на ввод пользователя
  *
  */
-
 
 import React, { Component } from 'react';
 import './item-add-form.css';
@@ -20,13 +19,16 @@ export default class ItemAdForm extends Component {
 
   onLabelChange = (event) => {
     this.setState({
-      label: event.target.value
+      label: event.target.value.toUpperCase()
     });
   };
 
   onSubmit = (event) => {
     event.preventDefault();
     this.props.onItemAdded(this.state.label);
+    this.setState({
+      label: ''
+    })
   };
 
   render() {
@@ -36,7 +38,8 @@ export default class ItemAdForm extends Component {
         <input type="text"
           className="form-control"
           onChange={ this.onLabelChange }
-          placeholder="What deeds to be done" />
+          placeholder="What deeds to be done"
+          value={ this.state.label } />
         <button className="btn btn-outline-secondary">Add Item</button>
       </form>
     );
