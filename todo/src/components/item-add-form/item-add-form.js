@@ -1,13 +1,3 @@
-/**
- * Controlled component
- * Контролируемые компоненты
- *
- * onChange() обновляет state, a state обновляет value элемента
- * state - удинственный источнки значений
- * легко обновлять value, можно обновлять не только в ответ на ввод пользователя
- *
- */
-
 import React, { Component } from 'react';
 import './item-add-form.css';
 
