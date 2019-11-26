@@ -1,31 +1,27 @@
 /**
- * http://swapi.co
+ * Обработка ошибок в Fetch API
  *
- * Как работет Fetch API
- *
- * Чтобы получить данные с сервера, нужно выполнить два вызова (каждый вернет Promise):
- *  res = await fetch(url);
- *  body = await res.json();
- *
- *  Кроме .json() есть другие функции для других типов ответа: arrayBuffer(), blob(), text(), formData()
+ * Fetch отклоняет (reject) Promise, только если роизошла ОШИБКА СЕТИ (сервер недоступен)
+ * Чтобы проверить код разультата, можно использовать result.status
+ * result.ok содержит true, если result.status содержит один из OK-статусов (200-299)
  *
  */
 
 const getResource = async (url) => {
-  const response = await fetch(url);
-  const body = await response.json();
+  const result = await fetch(url);
+
+  if (!result.ok) {
+    throw new Error(`Could not fetch ${url}, received ${result.status}`);
+  }
+
+  const body = await result.json();
   return body;
 };
 
-getResource('https://swapi.co/api/people/4/')
+getResource('https://swapi.co/api/people/4asdfas/')
   .then((body) => {
     console.log(body);
+  })
+  .catch((error) => {
+    console.error('Could not fetch', error);
   });
-
-// fetch('https://swapi.co/api/people/1/')
-//   .then((response) => {
-//     return response.json();
-//   })
-//   .then((body) => {
-//     console.log(body);
-//   });
