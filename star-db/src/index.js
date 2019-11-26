@@ -1,27 +1,63 @@
 /**
- * Обработка ошибок в Fetch API
+ * Пишем API-клиент
  *
- * Fetch отклоняет (reject) Promise, только если роизошла ОШИБКА СЕТИ (сервер недоступен)
- * Чтобы проверить код разультата, можно использовать result.status
- * result.ok содержит true, если result.status содержит один из OK-статусов (200-299)
+ * Код который работает с сетью лучше изолировать в отдельный класс-сервер
+ * Компоненты не должны знать откуда именно берутся данные
+ * Такой подход упростит тестирование и поддержду кода, который работает с API
  *
  */
 
-const getResource = async (url) => {
-  const result = await fetch(url);
+// Класс клиент для API
+class SwapiService {
 
-  if (!result.ok) {
-    throw new Error(`Could not fetch ${url}, received ${result.status}`);
+  _apiBase = 'https://swapi.co/api';
+
+  async getResource (url) {
+    const result = await fetch(`${this._apiBase}${url}`);
+
+    if (!result.ok) {
+      throw new Error(`Could not fetch ${url}, received ${result.status}`);
+    }
+
+    return await result.json();
   }
 
-  const body = await result.json();
-  return body;
-};
+  async getAllPeople() {
+    const res = await this.getResource(`/people/`);
+    return res.results;
+  }
 
-getResource('https://swapi.co/api/people/4asdfas/')
-  .then((body) => {
-    console.log(body);
-  })
-  .catch((error) => {
-    console.error('Could not fetch', error);
+  getPerson(id) {
+    return this.getResource(`/people/${id}`);
+  }
+
+  async getAllPlanets() {
+    const res = await this.getResource(`/planets/`);
+    return res.results;
+  }
+
+  getPlanet(id) {
+    return this.getResource(`/planets/${id}`);
+  }
+
+  async getAllStarships() {
+    const res = await this.getResource(`/starships/`);
+    return res.results;
+  }
+
+  getStarship(id) {
+    return this.getResource(`/starships/${id}`);
+  }
+}
+
+const swapi = new SwapiService();
+
+swapi.getAllStarships().then((ss) => {
+  ss.forEach((s) => {
+    console.log('*** ' + s.name);
   });
+});
+
+swapi.getStarship(0).then((s) => {
+  console.log(s.name);
+});
