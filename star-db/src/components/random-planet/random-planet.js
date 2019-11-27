@@ -1,8 +1,9 @@
 /**
- * Компонент который получает данные с сервера
+ * Трансформация данных API
  *
- * В конструкторе компонента вызываем сервис, который получит данные
- * В then() обновляем состояние компонента
+ * Изолировать код который обрабатывает данные
+ * Отделять модель данных API модели данных приложения
+ * Такая практика чаще применяется для крупных проектов со сложными моделями данных, которые могут изменяться
  *
  */
 
@@ -15,11 +16,7 @@ export default class RandomPlanet extends Component {
   SwapiService = new SwapiService();
 
   state = {
-    id: null,
-    name: null,
-    population: null,
-    rotationPeriod: null,
-    diameter: null
+    planet: {}
   };
 
   constructor() {
@@ -27,26 +24,20 @@ export default class RandomPlanet extends Component {
     this.updatePlanet();
   };
 
+  onPlanetLoaded = (planet) => {
+    this.setState({planet});
+  };
+
   updatePlanet() {
-
     const id = Math.floor(Math.random() * 25) + 2;
-
     this.SwapiService
       .getPlanet(id)
-      .then((planet) => {
-        this.setState({
-          id,
-          name: planet.name,
-          population: planet.population,
-          rotationPeriod: planet.rotation_period,
-          diameter: planet.diameter
-        });
-      });
+      .then(this.onPlanetLoaded);
   };
 
   render() {
 
-    const { id, name, population, rotationPeriod, diameter } = this.state;
+    const { planet: { id, name, population, rotationPeriod, diameter } } = this.state;
 
     return (
       <div className="random-planet jumbotron rounded">
