@@ -1,3 +1,7 @@
+/**
+ * Компонент который получает данные с сервера
+ */
+
 import React from 'react';
 
 import Header from '../header';
