@@ -1,15 +1,15 @@
 /**
- * Трансформация данных API
+ * Создаём индикатор загрузки
  *
- * Изолировать код который обрабатывает данные
- * Отделять модель данных API модели данных приложения
- * Такая практика чаще применяется для крупных проектов со сложными моделями данных, которые могут изменяться
+ * Хорошее приложение не отображает элементы для которых нет данных
+ * https://loading.io/ - сервис для создания спиннеров
  *
  */
 
 import React, { Component } from 'react';
 import SwapiService from '../../services/swapi-services';
 import './random-planet.css';
+import Spinner from "../spinner";
 
 export default class RandomPlanet extends Component {
 
@@ -38,6 +38,8 @@ export default class RandomPlanet extends Component {
   render() {
 
     const { planet: { id, name, population, rotationPeriod, diameter } } = this.state;
+
+    // return <Spinner/>;
 
     return (
       <div className="random-planet jumbotron rounded">
