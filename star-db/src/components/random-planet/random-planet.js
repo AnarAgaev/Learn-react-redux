@@ -1,8 +1,11 @@
 /**
- * Создаём индикатор загрузки
+ * Логика для индикатора загрузки
  *
- * Хорошее приложение не отображает элементы для которых нет данных
- * https://loading.io/ - сервис для создания спиннеров
+ * "Состояние" загрузки можно хранить в state
+ * В зависимости от этого состояния рендерим инидкатор загрузки или содержимое компонента (уже с данными)
+ * Нужно разделять логику и рендеринг в разные компоненты
+ * React.Fragment позволяет группировать элементы не создавая лишних DOM-объектов *
+ * Объявление <React.Fragment> в скобках можно опустить оставив только <> Код React элемента </>
  *
  */
 
@@ -16,7 +19,8 @@ export default class RandomPlanet extends Component {
   SwapiService = new SwapiService();
 
   state = {
-    planet: {}
+    planet: {},
+    loading: true
   };
 
   constructor() {
@@ -25,7 +29,9 @@ export default class RandomPlanet extends Component {
   };
 
   onPlanetLoaded = (planet) => {
-    this.setState({planet});
+    this.setState({
+      planet,
+      loading: false });
   };
 
   updatePlanet() {
@@ -36,33 +42,45 @@ export default class RandomPlanet extends Component {
   };
 
   render() {
-
-    const { planet: { id, name, population, rotationPeriod, diameter } } = this.state;
-
-    // return <Spinner/>;
+    const { planet, loading } = this.state;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !loading ? <PlanetView planet={ planet }/> : null;
 
     return (
       <div className="random-planet jumbotron rounded">
-        <img className="planet-image"
-             src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`} />
-        <div>
-          <h4>{ name }</h4>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <span className="term">Population</span>
-              <span>{ population }</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Rotation Period</span>
-              <span>{ rotationPeriod }</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Diameter</span>
-              <span>{ diameter }</span>
-            </li>
-          </ul>
-        </div>
+        { spinner }
+        { content }
       </div>
     );
   };
+};
+
+
+const PlanetView = ({ planet }) => {
+
+  const { id, name, population, rotationPeriod, diameter } = planet;
+
+  return (
+    <React.Fragment>
+      <img className="planet-image"
+           src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`} />
+      <div>
+        <h4>{ name }</h4>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            <span className="term">Population</span>
+            <span>{ population }</span>
+          </li>
+          <li className="list-group-item">
+            <span className="term">Rotation Period</span>
+            <span>{ rotationPeriod }</span>
+          </li>
+          <li className="list-group-item">
+            <span className="term">Diameter</span>
+            <span>{ diameter }</span>
+          </li>
+        </ul>
+      </div>
+    </React.Fragment>
+  );
 };
