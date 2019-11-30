@@ -1,18 +1,17 @@
 /**
- * Логика для индикатора загрузки
+ * Обработка ошибок сети в компоненте
  *
- * "Состояние" загрузки можно хранить в state
- * В зависимости от этого состояния рендерим инидкатор загрузки или содержимое компонента (уже с данными)
- * Нужно разделять логику и рендеринг в разные компоненты
- * React.Fragment позволяет группировать элементы не создавая лишних DOM-объектов *
- * Объявление <React.Fragment> в скобках можно опустить оставив только <> Код React элемента </>
+ * В state добавляем поле, где будем хранить флаг: нужно ли отобразить ошибку
+ * В зависимости от эттго флага, отображем ошибку, или нормальное содержимое компонента
+ * Внимательно: с async/await - код с await может выбрости Error Нужно обязательно учесть возможность ошибки асинхронноо кода
  *
  */
 
 import React, { Component } from 'react';
 import SwapiService from '../../services/swapi-services';
 import './random-planet.css';
-import Spinner from "../spinner";
+import Spinner from '../spinner';
+import ErrorIndicator from '../error-indicator'
 
 export default class RandomPlanet extends Component {
 
@@ -31,23 +30,38 @@ export default class RandomPlanet extends Component {
   onPlanetLoaded = (planet) => {
     this.setState({
       planet,
-      loading: false });
+      loading: false,
+      error: false
+    });
+  };
+
+  onError = (err) => {
+    this.setState({
+      error: true,
+      loading: false
+    });
   };
 
   updatePlanet() {
     const id = Math.floor(Math.random() * 25) + 2;
     this.SwapiService
       .getPlanet(id)
-      .then(this.onPlanetLoaded);
+      .then(this.onPlanetLoaded)
+      .catch(this.onError);
   };
 
   render() {
-    const { planet, loading } = this.state;
+    const { planet, loading, error } = this.state;
+
+    const hasData = !(loading || error);
+
+    const errorMessage = error ? <ErrorIndicator /> : null;
     const spinner = loading ? <Spinner /> : null;
-    const content = !loading ? <PlanetView planet={ planet }/> : null;
+    const content = hasData ? <PlanetView planet={ planet }/> : null;
 
     return (
       <div className="random-planet jumbotron rounded">
+        { errorMessage }
         { spinner }
         { content }
       </div>
@@ -57,9 +71,7 @@ export default class RandomPlanet extends Component {
 
 
 const PlanetView = ({ planet }) => {
-
   const { id, name, population, rotationPeriod, diameter } = planet;
-
   return (
     <React.Fragment>
       <img className="planet-image"
