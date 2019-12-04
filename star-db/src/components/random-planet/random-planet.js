@@ -1,9 +1,9 @@
 /**
- * Обработка ошибок сети в компоненте
+ * Жизненный цикл компонентов
  *
- * В state добавляем поле, где будем хранить флаг: нужно ли отобразить ошибку
- * В зависимости от эттго флага, отображем ошибку, или нормальное содержимое компонента
- * Внимательно: с async/await - код с await может выбрости Error Нужно обязательно учесть возможность ошибки асинхронноо кода
+ * Компонентам нужно выполнять код в определенные моменты своей жизни
+ * К примеру, перед тем, как компонент будет удалён, необходимо очистить ресурсы
+ * В React для этого есть механизм - МЕТОДЫ ЖИЗНЕННОГО ЦИКЛА (lifecycle hooks) *
  *
  */
 
@@ -25,6 +25,7 @@ export default class RandomPlanet extends Component {
   constructor() {
     super();
     this.updatePlanet();
+    this.interval = setInterval(this.updatePlanet, 2000);
   };
 
   onPlanetLoaded = (planet) => {
@@ -42,8 +43,9 @@ export default class RandomPlanet extends Component {
     });
   };
 
-  updatePlanet() {
-    const id = Math.floor(Math.random() * 25) + 2;
+  updatePlanet = () =>  {
+    console.log('updatePlanet');
+    const id = Math.floor(Math.random() * 25) + 3;
     this.SwapiService
       .getPlanet(id)
       .then(this.onPlanetLoaded)
