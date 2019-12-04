@@ -1,9 +1,33 @@
 /**
- * Жизненный цикл компонентов
+ * Методы жизненного цикла компонентов
  *
- * Компонентам нужно выполнять код в определенные моменты своей жизни
- * К примеру, перед тем, как компонент будет удалён, необходимо очистить ресурсы
- * В React для этого есть механизм - МЕТОДЫ ЖИЗНЕННОГО ЦИКЛА (lifecycle hooks) *
+ * Жизненный цикл (lifecycle): Инициализация => Обновление => Удаление
+ * На каждом этапе (жизненном цикле) есть несколько методов для работы именно в эттом жизненном цикле
+ *
+ * MOUNTING - когда компонент создаётся и первый раз отображается на странице
+ * -------
+ * constructor() => render() => componentDidMount()
+ *
+ * UPDATES - когда компонент отобразился и он может получать обновления (апдейты могут проходить благодаря двум событиям: пришили новые пропсы или обновился стэйт)
+ * -------
+ * New Props
+ *              => render() => componentDidUpdate()
+ * setState()
+ *
+ * UNMOUNTING - когда компонент больше не нужен и он удаляется со страницы
+ * -------
+ * componentWillUnmount()
+ *
+ * ERROR - когда компонент получает какую-либо ошибку, которая не была поймана ранее
+ * -------
+ * componentDidCatch()
+ *
+ * Помимо описанных методов жизненого цикла React компонентов
+ *  componentDidMount() - компонент "подключён" (DOM элементов уже на странице)
+ *  componentDidUpdate() - компонент обновился
+ *  omponentWillUnmount() - компонент будет удалён (но DOM ещё на странце)
+ *  componentDidCatch() - когда в компоненте (или в его child-компонентах) произошла ошибка
+ *  сущцествует множество других методов, но это самые основные, остальные используются гораздо реже
  *
  */
 
@@ -24,9 +48,18 @@ export default class RandomPlanet extends Component {
 
   constructor() {
     super();
+    console.log('constructor()');
     this.updatePlanet();
-    this.interval = setInterval(this.updatePlanet, 2000);
+    this.interval = setInterval(this.updatePlanet, 10000);
   };
+
+  componentDidMount() {
+    console.log('componentDidMount()');
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnmount()');
+  }
 
   onPlanetLoaded = (planet) => {
     this.setState({
@@ -44,7 +77,7 @@ export default class RandomPlanet extends Component {
   };
 
   updatePlanet = () =>  {
-    console.log('updatePlanet');
+    console.log('updatePlanet()');
     const id = Math.floor(Math.random() * 25) + 3;
     this.SwapiService
       .getPlanet(id)
@@ -53,10 +86,9 @@ export default class RandomPlanet extends Component {
   };
 
   render() {
+    console.log('render()');
     const { planet, loading, error } = this.state;
-
     const hasData = !(loading || error);
-
     const errorMessage = error ? <ErrorIndicator /> : null;
     const spinner = loading ? <Spinner /> : null;
     const content = hasData ? <PlanetView planet={ planet }/> : null;
