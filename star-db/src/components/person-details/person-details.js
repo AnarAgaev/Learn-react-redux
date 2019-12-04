@@ -1,44 +1,83 @@
 /**
  *
- * componentDidMount(prevProps, prevState)
+ * componentDidUpdate(prevProps, prevState) - Использование на практике
  *
- * Данный метод принимает два аргумента prevProps (предыдущее свойство) и prevState (предыдущий state)
- * Вызывается после того, как компонент обновился
- * Компонент обновляется после того, как получает новые свойства или state
- * Этот метод вызывается после render() - в нем можно, к примеру, запрашивать новые данные для обновленных свойств
+ * Использовали этот метод, чтобы подгузить новые данные, когда personId изменился
+ *
+ * !ОЧЕНЬ ВАЖНО: если в этом методе может изменяться state - обязательно нужно проверить,
+ * какое именно свойство именилось, иначе компонент рискует уйт в "вечный цикл" обновления
  *
  */
 
 import React, { Component } from 'react';
 
 import './person-details.css';
+import SwapiService from "../../services/swapi-services";
 
 export default class PersonDetails extends Component {
 
+  swapiService = new SwapiService();
+
+  state = {
+    person: null
+  };
+
+  componentDidMount() {
+    this.updatePerson();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.personId !== prevProps.personId) {
+      this.updatePerson();
+    }
+  }
+
+  updatePerson() {
+    const { personId } = this.props;
+    if (!personId) {
+      return;
+    }
+
+    this.swapiService
+      .getPerson(personId)
+      .then((person) => {
+        this.setState({ person });
+      });
+  }
+
   render() {
+
+    if (!this.state.person) {
+      return <span>Select a person from a list</span>;
+    }
+
+    const { id, name, gender,
+      birthYear, eyeColor } = this.state.person;
+
     return (
       <div className="person-details card">
         <img className="person-image"
-          src="https://starwars-visualguide.com/assets/img/characters/3.jpg" />
+             src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`}
+             alt="character"/>
 
         <div className="card-body">
-          <h4>R2-D2</h4>
+          <h4>{ name }</h4>
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
               <span className="term">Gender</span>
-              <span>male</span>
+              <span>{ gender }</span>
             </li>
             <li className="list-group-item">
               <span className="term">Birth Year</span>
-              <span>43</span>
+              <span>{ birthYear }</span>
             </li>
             <li className="list-group-item">
               <span className="term">Eye Color</span>
-              <span>red</span>
+              <span>{ eyeColor }</span>
             </li>
           </ul>
         </div>
       </div>
-    );
-  };
+    )
+  }
 };
