@@ -1,3 +1,13 @@
+/**
+ *
+ * componentWillUnmount()
+ * componentWillUnmount() - компонент будет удалён
+ * Данный метод полность симетрице методу componentDidMount() и вызывается пере тем как компонент окончательно очистится
+ * Используется для очистки рессурсов (таймеры, интервалы, запросы к серверу)
+ * В момет вызова DOM всё ещё находится на странице
+ *
+ */
+
 import React, { Component } from 'react';
 import SwapiService from '../../services/swapi-services';
 import './random-planet.css';
@@ -16,6 +26,10 @@ export default class RandomPlanet extends Component {
   componentDidMount() {
     this.updatePlanet();
     this.interval = setInterval(this.updatePlanet, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   onPlanetLoaded = (planet) => {
