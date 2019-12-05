@@ -1,8 +1,3 @@
-/**
- * Render функция
- *
- */
-
 import React, { Component } from 'react';
 
 import './item-list.css';

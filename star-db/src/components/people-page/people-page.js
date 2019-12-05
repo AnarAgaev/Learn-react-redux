@@ -1,8 +1,10 @@
 /**
- * componentDidCatch() - использование на практике
+ * Свойства-элементы
  *
- * Чтобы определить границы ошибок, нужны компоненты, которые будут разделять независимые блоки приложения
- * componentDidCatch() принимает для аргумента error и info с дополнительной информацией об источникке ошибки
+ * В качестве значения свойтва можно передавать React элемента
+ * <Card title={ <h1>Hi</h1> } />
+ * Так можно создавать элементы-"контейнеры"
+ * ... или элементы, которые умеют выбирать, что рендерить в зависимости от условия (загрузка, ошибка, и тому подобное)
  *
  */
 
@@ -11,6 +13,7 @@ import ItemList from "../item-list";
 import PersonDetails from "../person-details";
 import SwapiService from "../../services/swapi-services";
 import ErrorIndicator from "../error-indicator";
+import Row from '../row'
 import './people-page.css';
 
 export default class PeoplePage extends Component {
@@ -45,18 +48,20 @@ export default class PeoplePage extends Component {
       );
     }
 
+    const itemList = (
+      <ItemList
+        onItemSelected={this.onPersonSelected}
+        getData={ this.swapiService.getAllPeople }
+        renderItem={({ name, gender, birthYear }) => (
+          ` ${name} (${gender}, ${birthYear})`)} />
+    );
+
+    const personDetails = (
+      <PersonDetails personId={this.state.selectedPerson} />
+    );
+
     return (
-      <div className="row mb2">
-        <div className="col-md-6">
-          <ItemList
-            onItemSelected={this.onPersonSelected}
-            getData={ this.swapiService.getAllPeople }
-            renderItem={({ name, gender, birthYear }) => ` ${name} (${gender}, ${birthYear})`} />
-        </div>
-        <div className="col-md-6">
-          <PersonDetails personId={this.state.selectedPerson} />
-        </div>
-      </div>
+      <Row leftElement={ itemList } rightElement={ personDetails } />
     );
   }
 }
