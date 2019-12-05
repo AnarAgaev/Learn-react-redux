@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SwapiService from "../../services/swapi-services";
 import Spinner from '../spinner';
+import ErrorButton from "../error-button";
 import './person-details.css';
 
 export default class PersonDetails extends Component {
@@ -86,6 +87,9 @@ const PersonView = ({ person }) => {
           <li className="list-group-item">
             <span className="term">Eye Color</span>
             <span>{ eyeColor }</span>
+          </li>
+          <li className="list-group-item">
+            <ErrorButton />
           </li>
         </ul>
       </div>
