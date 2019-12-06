@@ -1,10 +1,10 @@
 /**
- * Свойства-элементы
+ * Children
  *
- * В качестве значения свойтва можно передавать React элемента
- * <Card title={ <h1>Hi</h1> } />
- * Так можно создавать элементы-"контейнеры"
- * ... или элементы, которые умеют выбирать, что рендерить в зависимости от условия (загрузка, ошибка, и тому подобное)
+ * Компоненту можно передавать одно из свойств, поместив его в тело элемента
+ * <Card>How are you</Card>
+ * Это свойство доступно через props.children
+ * Поддерживает любые типы данных: элементы, функции, объекты и другие.
  *
  */
 
@@ -13,7 +13,8 @@ import ItemList from "../item-list";
 import PersonDetails from "../person-details";
 import SwapiService from "../../services/swapi-services";
 import ErrorIndicator from "../error-indicator";
-import Row from '../row'
+import Row from '../row';
+import ErrorBoundary from "../error-boundry";
 import './people-page.css';
 
 export default class PeoplePage extends Component {
@@ -22,15 +23,7 @@ export default class PeoplePage extends Component {
 
   state = {
     selectedPerson: null,
-    hasError: false
   };
-
-  componentDidCatch(error, errorInfo) {
-    debugger;
-    this.setState({
-      hasError: true
-    });
-  }
 
   onPersonSelected = (id) => {
     this.setState({
@@ -51,13 +44,15 @@ export default class PeoplePage extends Component {
     const itemList = (
       <ItemList
         onItemSelected={this.onPersonSelected}
-        getData={ this.swapiService.getAllPeople }
-        renderItem={({ name, gender, birthYear }) => (
-          ` ${name} (${gender}, ${birthYear})`)} />
+        getData={this.swapiService.getAllPeople}>
+        { i => `${i.name} (${i.birthYear})` }
+      </ItemList>
     );
 
     const personDetails = (
-      <PersonDetails personId={this.state.selectedPerson} />
+      <ErrorBoundary>
+        <PersonDetails personId={this.state.selectedPerson} />
+      </ErrorBoundary>
     );
 
     return (
