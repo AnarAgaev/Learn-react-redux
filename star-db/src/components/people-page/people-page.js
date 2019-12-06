@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import ItemList from "../item-list";
-import PersonDetails from "../person-details";
+import ItemDetails from "../item-details";
 import SwapiService from "../../services/swapi-services";
 import ErrorIndicator from "../error-indicator";
 import Row from '../row'
@@ -21,12 +21,11 @@ export default class PeoplePage extends Component {
   swapiService = new SwapiService();
 
   state = {
-    selectedPerson: null,
+    selectedPerson: 5,
     hasError: false
   };
 
   componentDidCatch(error, errorInfo) {
-    debugger;
     this.setState({
       hasError: true
     });
@@ -56,12 +55,12 @@ export default class PeoplePage extends Component {
           ` ${name} (${gender}, ${birthYear})`)} />
     );
 
-    const personDetails = (
-      <PersonDetails personId={this.state.selectedPerson} />
+    const itemDetails = (
+      <ItemDetails itemId={this.state.selectedPerson} />
     );
 
     return (
-      <Row leftElement={ itemList } rightElement={ personDetails } />
+      <Row leftElement={ itemList } rightElement={ itemDetails } />
     );
   }
 }

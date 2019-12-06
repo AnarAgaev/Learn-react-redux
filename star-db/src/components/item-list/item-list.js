@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import './item-list.css';
-import SwapiService from "../../services/swapi-services";
 import Spinner from "../spinner";
 
 export default class ItemList extends Component {
@@ -23,8 +22,6 @@ export default class ItemList extends Component {
 
   renderItems(arr) {
     return arr.map((item, index) => {
-
-      if (index < 5) {
         const { id } = item;
         const label = this.props.renderItem(item);
 
@@ -35,7 +32,6 @@ export default class ItemList extends Component {
             { label }
           </li>
         );
-      }
     });
   }
 

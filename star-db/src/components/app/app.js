@@ -1,5 +1,10 @@
 /**
- * Свойства-элементы
+ *
+ * Рефакторинг компонента
+ *
+ * Вынес детали получения данных и адреса изображения в отдельные функции
+ * В таком виде компонент может работать с разными объектами
+ * Осталось решить, как сконфигурировать, какие именно данные будет отображать компонент
  *
  */
 
@@ -10,8 +15,9 @@ import ErrorButton from '../error-button';
 import PeoplePage from "../people-page";
 import ErrorIndicator from "../error-indicator";
 import ItemList from "../item-list";
-import PersonDetails from "../person-details";
+import ItemDetails from "../item-details";
 import SwapiService from "../../services/swapi-services";
+import Row from "../row";
 import './app.css';
 
 export default class App extends Component {
@@ -39,7 +45,6 @@ export default class App extends Component {
   }
 
   render() {
-
     if (this.state.hasError) {
       return (
         <div className="mt-5">
@@ -52,19 +57,32 @@ export default class App extends Component {
       <RandomPlanet/> :
       null;
 
+    const {
+      getPerson,
+      getStarship,
+      getPersonImage,
+      getStarshipImage } = this.swapiService;
+
+    const personDetails = (
+      <ItemDetails
+        itemId={11}
+        getData={getPerson}
+        getImageUrl={getPersonImage} />
+    );
+
+    const starshipDetails = (
+      <ItemDetails
+        itemId={5}
+        getData={getStarship}
+        getImageUrl={getStarshipImage} />
+    );
+
     return (
       <div className="stardb-app container">
         <Header />
-        { planet }
-        <div className="row mb2 button-row">
-          <button
-            className="toggle-planet btn btn-warning btn-lg"
-            onClick={this.toggleRandomPlanet}>
-            Toggle Random Planet
-          </button>
-          <ErrorButton />
-        </div>
-        <PeoplePage />
+        <Row
+          leftElement={ personDetails }
+          rightElement={ starshipDetails } />
       </div>
     );
   }
