@@ -1,10 +1,10 @@
 /**
  *
- * Работы с props.children
+ * Клонирование элементов
  *
- * Компонент может решать, как именно использовать children
- * Функция React.Children.map() упрощает обработку props.children
- * Child элементы можно заменять, оборачивать в другие компоненты или скрывать (если вернуть null)
+ * React элементы нельзя изменять (они считаются immutable)
+ * ... но можно создавать иодифицированные копии при помощи React.cloneElement()
+ * К примеру, элементам можно добавлять новые свойства через второй аргумент
  *
  */
 
@@ -13,11 +13,11 @@ import Spinner from '../spinner';
 import ErrorButton from "../error-button";
 import './item-details.css';
 
-export const Record = ({ field, label }) => {
+export const Record = ({ item, field, label }) => {
   return (
     <li className="list-group-item">
       <span className="term">{ label }</span>
-      <span>{ field }</span>
+      <span>{ item[field] }</span>
     </li>
   );
 };
@@ -69,7 +69,12 @@ export default class ItemDetails extends Component {
     const { item, loading, image } = this.state;
     const spinner = loading ? <Spinner /> : null;
     const hasData = !loading;
-    const content = hasData ? <ItemView item={ item } image={ image } children={this.props.children}/> : null;
+    const content = hasData ?
+      <ItemView
+        item={ item }
+        image={ image }
+        children={this.props.children} /> :
+      null;
 
     return (
       <div className="item-details card">
@@ -92,7 +97,7 @@ const ItemView = ({ item, image, children }) => {
         <ul className="list-group list-group-flush">
           {
             React.Children.map(children, (child, idx) => {
-              return <li>{idx}</li>;
+              return React.cloneElement(child, { item });
             })
           }
           <li className="list-group-item">
