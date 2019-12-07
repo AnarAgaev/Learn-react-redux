@@ -1,40 +1,28 @@
 /**
- * NPM: установка дополнительных пакетов
+ * библиотека prop-types
  *
- * Чтобы установить новый пакет:
+ * Библиотека prop-types - набор стандартных функций-валидаторов
  *
- * npm install prop-types
+ * MyComponent.propTypes = {
+ *   'some_number': PropTypes.number
+ *   'some_mandatory_number': PropTypes.number.isRequired
+ * }
  *
- * NPM - стандартный менеджер пакетов в Node.js
- * NPM используется не только для Node.js пакетов, но и для front-end разработки
+ * Есть и другие бибилотеки, с дополнительными валидаторами. К пример airbnb-prop-types имеющие больший функционал возможностей
  *
  */
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 import SwapiService from '../../services/swapi-service';
-
 import './random-planet.css';
 
 export default class RandomPlanet extends Component {
 
   static defaultProps = {
     updateInterval: 10000
-  };
-
-  static propTypes = {
-    updateInterval: (props, propName, componentName) => {
-      const value = props[propName];
-
-      if (typeof value === 'number' && !isNaN(value)) {
-        return null;
-      }
-
-      return new TypeError(`${componentName}: ${propName} must be number`);
-    }
   };
 
   static propTypes = {
