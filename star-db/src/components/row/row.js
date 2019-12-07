@@ -1,27 +1,24 @@
-/**
- * Свойства-элементы
- *
- * В качестве значения свойтва можно передавать React элемента
- * <Card title={ <h1>Hi</h1> } />
- * Так можно создавать элементы-"контейнеры"
- * ... или элементы, которые умеют выбирать, что рендерить в зависимости от условия (загрузка, ошибка, и тому подобное)
- *
- */
-
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './row.css';
 
-const Row = ({ leftElement, rightElement }) => {
+const Row = ({ left, right }) => {
   return (
     <div className="row mb2">
       <div className="col-md-6">
-        { leftElement }
+        {left}
       </div>
       <div className="col-md-6">
-        { rightElement }
+        {right}
       </div>
     </div>
   );
+};
+
+Row.propTypes = {
+  left: PropTypes.node,
+  right: PropTypes.node
 };
 
 export default Row;
