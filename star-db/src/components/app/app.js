@@ -1,15 +1,5 @@
 /**
- * defaultProps
- *
- * Позволяет устанаовить значения по-умолчанию для свойств
- *
- * const Comp = ({ name }) => (<p>{ name }</p>);
- * Comp.defaultProps = {
- *   name: 'Bob'
- * }
- *
- * // отрендерит Hi Bob
- * <Comp />
+ * propTypes
  *
  */
 

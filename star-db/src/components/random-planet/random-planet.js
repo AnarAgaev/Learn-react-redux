@@ -1,3 +1,23 @@
+/**
+ * propTypes
+ *
+ * Позволяет проверить значения свойств (props), которые получает компонент
+ *
+ * const Comp = ({ name }) => (<p>{ name }</p>);
+ * Comp.propNypes = {
+ *   name: (props, propName, componentName) => {...}
+ * }
+ *
+ * Проверка срабатывает ПОСЛЕ defaultProps
+ * Функция-валидатор возвращает null или объект Error
+ *
+ *
+ * props - весь объект свойств с которым работаем
+ * propName - имя того свойства для которого проводится валидация
+ * componentName - название компонента для которого проводтся валидация
+ *
+ */
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -11,6 +31,18 @@ export default class RandomPlanet extends Component {
 
   static defaultProps = {
     updateInterval: 10000
+  };
+
+  static propTypes = {
+    updateInterval: (props, propName, componentName) => {
+      const value = props[propName];
+
+      if (typeof value === 'number' && !isNaN(value)) {
+        return null;
+      }
+
+      return new TypeError(`${componentName}: ${propName} must be number`);
+    }
   };
 
   static propTypes = {
