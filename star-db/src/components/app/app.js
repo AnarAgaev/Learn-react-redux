@@ -1,21 +1,14 @@
 /**
  *
- * Рефакторинг компонента
- *
- * Вынес детали получения данных и адреса изображения в отдельные функции
- * В таком виде компонент может работать с разными объектами
- * Осталось решить, как сконфигурировать, какие именно данные будет отображать компонент
+ * Работы с props.children
  *
  */
 
 import React, { Component } from 'react';
 import Header from '../header';
 import RandomPlanet from '../random-planet';
-import ErrorButton from '../error-button';
-import PeoplePage from "../people-page";
 import ErrorIndicator from "../error-indicator";
-import ItemList from "../item-list";
-import ItemDetails from "../item-details";
+import ItemDetails, { Record } from "../item-details";
 import SwapiService from "../../services/swapi-services";
 import Row from "../row";
 import './app.css';
@@ -67,14 +60,22 @@ export default class App extends Component {
       <ItemDetails
         itemId={11}
         getData={getPerson}
-        getImageUrl={getPersonImage} />
+        getImageUrl={getPersonImage}>
+
+        <Record field="gender" label="Gender" />
+        <Record field="eyeColor" label="Eye Color" />
+
+      </ItemDetails>
     );
 
     const starshipDetails = (
       <ItemDetails
         itemId={5}
         getData={getStarship}
-        getImageUrl={getStarshipImage} />
+        getImageUrl={getStarshipImage}>
+
+
+      </ItemDetails>
     );
 
     return (

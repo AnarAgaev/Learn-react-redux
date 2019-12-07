@@ -1,10 +1,28 @@
+/**
+ *
+ * Работы с props.children
+ *
+ * Компонент может решать, как именно использовать children
+ * Функция React.Children.map() упрощает обработку props.children
+ * Child элементы можно заменять, оборачивать в другие компоненты или скрывать (если вернуть null)
+ *
+ */
+
 import React, { Component } from 'react';
 import Spinner from '../spinner';
 import ErrorButton from "../error-button";
 import './item-details.css';
 
-export default class ItemDetails extends Component {
+export const Record = ({ field, label }) => {
+  return (
+    <li className="list-group-item">
+      <span className="term">{ label }</span>
+      <span>{ field }</span>
+    </li>
+  );
+};
 
+export default class ItemDetails extends Component {
   state = {
     item: this.props.itemId,
     loading: true,
@@ -51,7 +69,7 @@ export default class ItemDetails extends Component {
     const { item, loading, image } = this.state;
     const spinner = loading ? <Spinner /> : null;
     const hasData = !loading;
-    const content = hasData ? <ItemView item={ item } image={ image }/> : null;
+    const content = hasData ? <ItemView item={ item } image={ image } children={this.props.children}/> : null;
 
     return (
       <div className="item-details card">
@@ -62,8 +80,7 @@ export default class ItemDetails extends Component {
   }
 };
 
-const ItemView = ({ item, image }) => {
-  const { name, gender, birthYear, eyeColor } = item;
+const ItemView = ({ item, image, children }) => {
   return (
     <React.Fragment>
       <img className="item-image"
@@ -71,20 +88,13 @@ const ItemView = ({ item, image }) => {
            alt="character"/>
 
       <div className="card-body">
-        <h4>{ name }</h4>
+        <h4>{ item.name }</h4>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <span className="term">Gender</span>
-            <span>{ gender }</span>
-          </li>
-          <li className="list-group-item">
-            <span className="term">Birth Year</span>
-            <span>{ birthYear }</span>
-          </li>
-          <li className="list-group-item">
-            <span className="term">Eye Color</span>
-            <span>{ eyeColor }</span>
-          </li>
+          {
+            React.Children.map(children, (child, idx) => {
+              return <li>{idx}</li>;
+            })
+          }
           <li className="list-group-item">
             <ErrorButton />
           </li>
