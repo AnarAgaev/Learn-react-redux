@@ -1,17 +1,5 @@
 /**
- * Основы React Router
- *
- * Первое, что нужно сделать это установить библеотеку React Router - npm install react-router-dom
- *
- * Пример роутинга для приложения:
- * <Router>
- *    <Route path="/blog" component={Blog} />
- *    <Route path="/about" component={About} />
- *    <Route path="/shop" component={Shop} />
- * </Router>
- *
- * React Router это не часть React. Есть и другие библиотеки для роутинга (к примеру, UI-Router)
- *
+ * Link - переход по навигационным ссылкам
  *
  */
 
