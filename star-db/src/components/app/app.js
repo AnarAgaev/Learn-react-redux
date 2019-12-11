@@ -1,9 +1,14 @@
 /**
- * Как работает Rout
+ * Динамические пути
  *
- * В Route можно передать render функцию: <Route path="/hi" render={() => <p>Hi</p>} />
- * Route работает как фильтр - сравнивая path с текущим адресом он решает, отрисовать содержимое или нет.
- * Параметр exact говорит, что нужно использовать точное совпадение (а не "path является частью адреса")
+ * В Route можно передать параметры:
+ * <Route path="/people/:id"
+ *        render={({ match }) => <p>{match.params.id}</p>} />
+ *
+ * :id может быть любой строкой, которая идёт после /people/
+ *
+ * Если не установить exact, то путь /people будет срабатывать всегда, когда срабатывает /people/:id
+ *
  *
  */
 
@@ -13,6 +18,7 @@ import RandomPlanet from '../random-planet';
 import ErrorBoundry from '../error-boundry';
 import SwapiService from '../../services/swapi-service';
 import DummySwapiService from '../../services/dummy-swapi-service';
+import StarshipDetails from "../sw-components/starship-details";
 import { PeoplePage, PlanetsPage, StarshipsPage } from '../pages';
 import { SwapiServiceProvider } from '../swapi-service-context';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -49,7 +55,12 @@ export default class App extends Component {
                      exact={true} />
               <Route path="/people" component={PeoplePage} />
               <Route path="/planets" component={PlanetsPage} />
-              <Route path="/starships" component={StarshipsPage} />
+              <Route path="/starships" exact component={StarshipsPage} />
+              <Route path="/starships/:id"
+                     render={({ match }) => {
+                       const { id } = match.params;
+                       return <StarshipDetails itemId={ id }/>
+                     }} />
             </div>
           </Router>
         </SwapiServiceProvider>
