@@ -1,16 +1,17 @@
 /**
- * withRouter()
+ * Относительные пути
  *
- * withRouter это компонент высшего порядка, он передает компоненту обекты react router:
+ * В react-router можно использовать относительные пути
+ * history.push('/person'); // абсолютный путь
+ * history.push('person'); // относительный путь
  *
- * const MyComponent = ({ match, location, history }) => {
- *   return (
- *     <Button
- *       onClick={() => history.push('/new/path')} >
- *       Click Me
- *     </Button>
- *   );
- * }
+ * !ОБЯЗАТЕЛЬНО СТАВИТЬ ЗАКРЫВАЮЩИЙ СЛЕШ В URL ССЫЛКИ
+ * history.push('person');
+ *  // текуший адрес - /site/catalog/
+ *  // результат  - /site/catalog/person
+ *
+ *  // текуший адрес - /site/catalog (без обратного слеша!)
+ *  // результат  - /site/person
  *
  */
 
@@ -21,9 +22,7 @@ import { withRouter } from 'react-router-dom';
 const StarshipsPage = ({ history }) => {
   return (
     <StarshipList
-      onItemSelected={( itemId ) => {
-        history.push(`/starships/${ itemId }`)
-      }} />
+      onItemSelected={( id ) => history.push( id )} />
   );
 };
 

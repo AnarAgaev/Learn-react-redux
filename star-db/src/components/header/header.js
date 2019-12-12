@@ -1,9 +1,5 @@
 /**
- * Link
- *
- * Чтобы переключать страницы, нужно использовать компонент Link из react-router
- * <Link to="/example-page">example-page</Link>
- * Link работает почти как тег <a>, но он не перезагружает страницу (и при этом обновляет URL в адресной строке)
+ * Относительные пути
  *
  */
 
@@ -21,13 +17,13 @@ const Header = ({ onServiceChange }) => {
       </h3>
       <ul className="d-flex">
         <li>
-          <Link to="/people">People</Link>
+          <Link to="/people/">People</Link>
         </li>
         <li>
-          <Link to="/planets">Planets</Link>
+          <Link to="/planets/">Planets</Link>
         </li>
         <li>
-          <Link to="/starships">Starships</Link>
+          <Link to="/starships/">Starships</Link>
         </li>
       </ul>
 
