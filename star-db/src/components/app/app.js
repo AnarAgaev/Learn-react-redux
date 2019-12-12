@@ -1,10 +1,14 @@
 /**
- * Авторизация и "закрытие" страницы
+ * Компонент Switch (обработка несуществующих адресов)
  *
- * Можно использовать компонент Redirect чтобы переслать пользователя на логин-страницу:
- * <Redirect to="/page-name" />
+ * Компонент Switch оборачивает другие компоненты (Route и Redirect)
+ * <Switch>
+ *   <Route path="/books" ...>
+ *   <Route path="/blog" ...>
+ * </Switch>
  *
- * В React приложениях проверка прав пользователей ОБЗЯТЕЛЬНО должна происходить на сервере
+ * Switch отрисует ТОЛЬКО ПЕРВЫЙ ЭЛЕМЕНТ, который соответствует адресу
+ * Route без свойства path срабатывает всегда, можно использовать это свойство для отрисовки какого либо React элемента вместо 404 страницы
  *
  */
 
@@ -22,7 +26,11 @@ import {
   LoginPage,
   SecretPage } from '../pages';
 import { SwapiServiceProvider } from '../swapi-service-context';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect } from 'react-router-dom';
 import './app.css';
 
 export default class App extends Component {
@@ -59,32 +67,33 @@ export default class App extends Component {
               <Header onServiceChange={this.onServiceChange} />
               <RandomPlanet />
 
-              <Route path="/"
-                     render={() => <h2>Welcome to StarDB</h2>}
-                     exact={true} />
-              <Route path="/people"
-                     render={() => <h2>People</h2>}
-                     exact />
-              <Route path="/people/:id?" component={PeoplePage} />
-              <Route path="/planets" component={PlanetsPage} />
-              <Route path="/starships" exact component={StarshipsPage} />
-              <Route path="/starships/:id"
-                     render={({ match }) => {
-                       const { id } = match.params;
-                       return <StarshipDetails itemId={ id }/>
-                     }} />
-              <Route
-                path="/login"
-                render={() => (
-                  <LoginPage
-                    isLoggedIn={ isLoggedIn }
-                    onLogin={ this.onLogin } />
-                )} />
-              <Route
-                path="/secret"
-                render={() => (
-                  <SecretPage isLoggedIn={ isLoggedIn }/>
-                )} />
+              <Switch>
+                <Route path="/"
+                       render={() => <h2>Welcome to StarDB</h2>}
+                       exact={true} />
+                <Route path="/people/:id?" component={PeoplePage} />
+                <Route path="/planets" component={PlanetsPage} />
+                <Route path="/starships" exact component={StarshipsPage} />
+                <Route path="/starships/:id"
+                       render={({ match }) => {
+                         const { id } = match.params;
+                         return <StarshipDetails itemId={ id }/>
+                       }} />
+                <Route
+                  path="/login"
+                  render={() => (
+                    <LoginPage
+                      isLoggedIn={ isLoggedIn }
+                      onLogin={ this.onLogin } />
+                  )} />
+                <Route
+                  path="/secret"
+                  render={() => (
+                    <SecretPage isLoggedIn={ isLoggedIn }/>
+                  )} />
+                  <Route render={() => <h2>Page not found!</h2>}/>
+                  { /* <Redirect to="/404" Можно испльзовать отдельную страницу, если ни один из предыдущих Route не сработал */ }
+              </Switch>
             </div>
           </Router>
         </SwapiServiceProvider>
