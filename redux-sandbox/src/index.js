@@ -1,15 +1,11 @@
 /*
-* Действия с параметрами
+* Action Creator
 *
-* Кроме типа, любой действие (action) может содержать дополнительную информациюЖ
-*
-* store.dispatch({
-*   type: 'USER_LOGGED_IN',
-*   name: 'Smith',
-*   role: 'admin',
-* });
-*
-* Часто дополнительные параметры передаюстя в поле payload
+* Action Creator - это функция которая создаёт объекты action. Упрощает код:
+* const userLoggedIn = (name, role) => {
+*   return { type: 'USER_LOGGED_IN', name, role }
+* }
+* store.dispatch(userLoggedIn('Arnold', 'admin'));
 *
 */
 
@@ -30,26 +26,29 @@ const reducer = (state = 0, action) => {
 
 const store = createStore(reducer);
 
+const inc = () => ({type: 'INC'});
+
+const dec = () => ({type: 'DEC'});
+
+const rnd = (payload) => ({type: 'RND', payload});
+
 document
   .getElementById('inc')
   .addEventListener('click', () => {
-    store.dispatch({type: 'INC'});
+    store.dispatch(inc());
 });
 
 document
   .getElementById('dec')
   .addEventListener('click', () => {
-    store.dispatch({type: 'DEC'});
+    store.dispatch(dec());
 });
 
 document
   .getElementById('rnd')
   .addEventListener('click', () => {
     const payload = Math.floor(Math.random() * 10);
-    store.dispatch({
-      type: 'RND',
-      payload
-    });
+    store.dispatch(rnd(payload));
 });
 
 const update = () => {
