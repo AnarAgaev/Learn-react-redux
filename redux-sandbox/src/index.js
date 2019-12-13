@@ -1,12 +1,18 @@
 /*
-* Reducer
+* Redux Store
 *
-* Reducer это обычная функция:
-* (state, action) => newState
-* Если state - undefined, то нужно вернуть первоначальный (initial) state
-* Если тип action неизвестен - нужно вернуть state без изменений
+* Store координирует работу с данными в Redux приложении.
+* const store = createStore(reducer);
+*
+* // получать нотификации об изменениях
+* store.subscribe(() => {do something})
+*
+* // обрабатывать новый action:
+* store.dispatch(action);
 *
 */
+
+import { createStore } from "redux";
 
 const reducer = (state = 0, action) => {
   switch (action.type) {
@@ -17,7 +23,12 @@ const reducer = (state = 0, action) => {
   }
 };
 
-let state = reducer(undefined, {});
-state = reducer(state, {type: 'INC'});
+const store = createStore(reducer);
 
-console.log(state)
+store.subscribe(() => {
+  console.log(store.getState());
+});
+
+store.dispatch({type: 'INC'});
+store.dispatch({type: 'INC'});
+
