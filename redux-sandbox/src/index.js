@@ -1,8 +1,3 @@
-/*
-* react-redux и функция connect()
-*
-*/
-
 import React from "react";
 import ReactDOM from 'react-dom';
 import { createStore } from "redux";

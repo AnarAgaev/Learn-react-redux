@@ -1,17 +1,21 @@
 /*
-* react-redux и функция connect()
+* mapDispatchToProps()
 *
-* react-redux упрощает интеграцию react + redux
-* Provider дулает store доступным всему дереву компонентов (через контекст)
-* connect() - компонент высшего порядка, который передает значения из store  в компонент
-* const mapStateToProps = (state) => {
-*   return { name: state.name, age: state.age };
+* mapDispatchToProps() - второй аргумент для функции connect():
+* const mapStateToProps = (dispatch) => {
+*   return {
+*     inc: () => dispatch({ type: 'INC' })
+*   };
 * };
+*
+* Созданные функции будут переданы в компонент. Таким способом компонент может обновить состояние в store
 *
 */
 
 import React from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import * as actions from '../actions';
 
 const Counter = ({ counter, inc, dec, rnd }) => {
   return (
@@ -36,4 +40,18 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Counter);
+const mapDispatchToProps = (dispatch) => {
+
+  const {inc, dec, rnd} = bindActionCreators(actions, dispatch);
+
+  return {
+    inc,
+    dec,
+    rnd: () => {
+      const randomValue = Math.floor(Math.random()*10);
+     rnd(randomValue);
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
