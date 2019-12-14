@@ -1,34 +1,37 @@
 /*
-* Структура проекта
+* bindActionCreators()
 *
-* Есть несколько подходов к структуре Redux проекта
-* Один из подходов - вынести reducer-функции и action creator функции в отдельные файлы, или папки
+* bindActionCreators() - связывает функцию action creator с функцией dispatch()
+* cont { add, remove } = bindActionCreators(actions);
+*
+* Созданные таким способом функции делают
+* сразу два действия - создание действия (actions) и отправка action в dispatch();*
+*
 */
 
-import { createStore } from "redux";
+import {bindActionCreators, createStore} from "redux";
 import reducer from "./reducer";
-import {inc, dec, rnd } from "./actions";
+import * as actions from "./actions";
 
 const store = createStore(reducer);
+const { dispatch } = store;
 
+const { inc, dec, rnd } =
+  bindActionCreators(actions, dispatch);
 
 document
   .getElementById('inc')
-  .addEventListener('click', () => {
-    store.dispatch(inc());
-});
+  .addEventListener('click', inc);
 
 document
   .getElementById('dec')
-  .addEventListener('click', () => {
-    store.dispatch(dec());
-});
+  .addEventListener('click', dec);
 
 document
   .getElementById('rnd')
   .addEventListener('click', () => {
     const payload = Math.floor(Math.random() * 10);
-    store.dispatch(rnd(payload));
+    rnd(payload);
 });
 
 const update = () => {
