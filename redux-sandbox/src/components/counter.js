@@ -1,14 +1,14 @@
 /*
-* mapDispatchToProps()
+* mapDispatchToProps() - в виде объекта
 *
-* mapDispatchToProps() - второй аргумент для функции connect():
-* const mapStateToProps = (dispatch) => {
-*   return {
-*     inc: () => dispatch({ type: 'INC' })
-*   };
-* };
+* Action Creators не обязательно должен быть чистой функцией
 *
-* Созданные функции будут переданы в компонент. Таким способом компонент может обновить состояние в store
+* Если вторй аргумент connect() это объект connect(mapStateToProps, actions)(MyComponent);
+* То результат будет таким же, как для кода:
+* connect(
+*   mapStateToProps,
+*   (dispatch) => bindActionCreators(actions, dispatch))
+*   (MyComponent);
 *
 */
 
@@ -41,17 +41,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-
-  const {inc, dec, rnd} = bindActionCreators(actions, dispatch);
-
-  return {
-    inc,
-    dec,
-    rnd: () => {
-      const randomValue = Math.floor(Math.random()*10);
-     rnd(randomValue);
-    }
-  };
+  return bindActionCreators(actions, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+
+// В данном случае можно было бы просто использовать export default connect(mapStateToProps, actions)(Counter);
+// т.к mapDispatchToProps возвращает объект, а connect умеет работать с обхектами
